@@ -51,25 +51,25 @@ jobs:
             GIT_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }}
     
 # # NEXT JOB #######################################################################   
-#   test-unit:
-#     name: Unit tests in Docker
-#     needs: [build-test-image]
-#     runs-on: ubuntu-latest
+  test-unit:
+    name: Unit tests in Docker
+    needs: [build-test-image]
+    runs-on: ubuntu-latest
 
-#     permissions:
-#       packages: read
+    permissions:
+      packages: read
       
-#     steps:
+    steps:
       
-#       - name: Login to ghcr.io registry
-#         uses: docker/login-action@v2
-#         with:
-#           registry: ghcr.io
-#           username: ${{ github.actor }}
-#           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to ghcr.io registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       
-#       - name: Unit Testing in Docker
-#         run: docker run --rm ghcr.io/mariushincu/test:"$GITHUB_RUN_ID" echo "run test commands here"
+      - name: Unit Testing in Docker
+        run: docker run --rm ghcr.io/instajobber/test:"$GITHUB_RUN_ID" echo "run test commands here"
 
 # # NEXT JOB #######################################################################   
 #   test-integration:
