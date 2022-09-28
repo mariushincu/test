@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+  pull_request:
     
 jobs:
 
@@ -31,20 +32,24 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.SECRTET_GITHUB_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Build and Push to GHCR
         uses: docker/build-push-action@v3
         with:
-          context: .
-          push: true
-          tags: ghcr.io/mariushincu/test:latest
-          target: test
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: mariushincu/test:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: linux/amd64
-          secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.SECRTET_GITHUB_TOKEN }}
+          # context: .
+          # push: true
+          # tags: mariushincu/test:latest
+          # target: test
+          # cache-from: type=gha
+          # cache-to: type=gha,mode=max
+          # platforms: linux/amd64,linux/arm64,linux/arm/v7
+          # secrets: |
+          #   GIT_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }}
     
 # NEXT JOB #######################################################################   
   test-unit:
@@ -62,7 +67,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.SECRTET_GITHUB_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Unit Testing in Docker
         run: docker run --rm ghcr.io/mariushincu/test:"$GITHUB_RUN_ID" echo "run test commands here"
@@ -92,7 +97,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.SECRTET_GITHUB_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Test healthcheck in Docker Compose
         run: |
@@ -125,7 +130,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.SECRTET_GITHUB_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: AbsaOSS/k3d-action@v2
         with:
@@ -140,7 +145,7 @@ jobs:
           kubectl create secret docker-registry regcred \
             --docker-server=https://ghcr.io \
             --docker-username=${{ github.actor }} \
-            --docker-password=${{ secrets.SECRTET_GITHUB_TOKEN }}
+            --docker-password=${{ secrets.GITHUB_TOKEN }}
           export TESTING_IMAGE=ghcr.io/mariushincu/test:"$GITHUB_RUN_ID"
           envsubst < manifests/deployment.yaml  | kubectl apply -f -
           kubectl rollout status deployment myapp
@@ -173,7 +178,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.SECRTET_GITHUB_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pull image to scan
         run: docker pull ghcr.io/mariushincu/test:"$GITHUB_RUN_ID"
@@ -233,7 +238,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.SECRTET_GITHUB_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker Metadata for Final Image Build
         id: docker_meta
@@ -260,7 +265,7 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.SECRTET_GITHUB_TOKEN }}
+            GIT_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }}
 
       # If PR, put image tags in the PR comments
       # from https://github.com/marketplace/actions/create-or-update-comment
