@@ -2,10 +2,11 @@ name: CI/CD Parallel Jobs
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-
+    branches: [ main ]
+  workflow_dispatch:
+    
 jobs:
 
 # FIRST JOB #######################################################################   
@@ -32,7 +33,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.SECRTET_GITHUB_TOKEN }}
       
       - name: Build and Push to GHCR
         uses: docker/build-push-action@v2
@@ -60,7 +61,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.SECRTET_GITHUB_TOKEN }}
       
       - name: Unit Testing in Docker
         run: docker run --rm ghcr.io/mariushincu/test:"$GITHUB_RUN_ID" echo "run test commands here"
@@ -90,7 +91,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.SECRTET_GITHUB_TOKEN }}
 
       - name: Test healthcheck in Docker Compose
         run: |
@@ -123,7 +124,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.SECRTET_GITHUB_TOKEN }}
 
       - uses: AbsaOSS/k3d-action@v2
         with:
@@ -138,7 +139,7 @@ jobs:
           kubectl create secret docker-registry regcred \
             --docker-server=https://ghcr.io \
             --docker-username=${{ github.actor }} \
-            --docker-password=${{ secrets.GITHUB_TOKEN }}
+            --docker-password=${{ secrets.SECRTET_GITHUB_TOKEN }}
           export TESTING_IMAGE=ghcr.io/mariushincu/test:"$GITHUB_RUN_ID"
           envsubst < manifests/deployment.yaml  | kubectl apply -f -
           kubectl rollout status deployment myapp
@@ -171,7 +172,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.SECRTET_GITHUB_TOKEN }}
 
       - name: Pull image to scan
         run: docker pull ghcr.io/mariushincu/test:"$GITHUB_RUN_ID"
@@ -229,7 +230,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.SECRTET_GITHUB_TOKEN }}
 
       - name: Docker Metadata for Final Image Build
         id: docker_meta
