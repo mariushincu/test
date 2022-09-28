@@ -37,13 +37,9 @@ jobs:
       - name: Build and Push to GHCR
         uses: docker/build-push-action@v3
         with:
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: mariushincu/test
-          # cache-from: type=gha
-          # cache-to: type=gha,mode=max
-          # context: .
-          # push: true
-          # tags: mariushincu/test:latest
+          context: .
+          push: true
+          tags: mariushincu/test:latest
           # target: test
           # cache-from: type=gha
           # cache-to: type=gha,mode=max
