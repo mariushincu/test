@@ -240,7 +240,7 @@ jobs:
         id: docker_meta
         uses: docker/metadata-action@v3
         with:
-          images: anderspink/webapp,ghcr.io/mariushincu/test
+          images: mariushincu/test,ghcr.io/mariushincu/test
           flavor: |
             latest=false
           tags: |
