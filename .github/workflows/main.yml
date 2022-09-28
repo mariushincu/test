@@ -38,9 +38,9 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: ${{ github.event_name != 'pull_request' }}
-          tags: mariushincu/test:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: mariushincu/test
+          # cache-from: type=gha
+          # cache-to: type=gha,mode=max
           # context: .
           # push: true
           # tags: mariushincu/test:latest
