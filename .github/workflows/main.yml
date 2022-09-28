@@ -242,7 +242,7 @@ jobs:
 
       - name: Docker Metadata for Final Image Build
         id: docker_meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: anderspink/webapp,ghcr.io/mariushincu/test
           flavor: |
