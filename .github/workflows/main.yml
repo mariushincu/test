@@ -2,10 +2,8 @@ name: CI/CD Parallel Jobs
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
+    branches:
+      - 'main'
     
 jobs:
 
@@ -20,32 +18,33 @@ jobs:
     steps:
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Login to ghcr.io registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.SECRTET_GITHUB_TOKEN }}
       
-      # - name: Build and Push to GHCR
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     push: true
-      #     tags: ghcr.io/mariushincu/test:${{ github.run_id }}
-      #     target: test
-      #     cache-from: type=gha
-      #     cache-to: type=gha,mode=max
-      #     platforms: linux/amd64
-      #     secrets: |
-      #       GIT_AUTH_TOKEN=${{ secrets.SECRTET_GITHUB_TOKEN }}
+      - name: Build and Push to GHCR
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/mariushincu/test:latest
+          target: test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+          secrets: |
+            GIT_AUTH_TOKEN=${{ secrets.SECRTET_GITHUB_TOKEN }}
     
 # NEXT JOB #######################################################################   
   test-unit:
@@ -59,7 +58,7 @@ jobs:
     steps:
       
       - name: Login to ghcr.io registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -83,13 +82,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
       - name: Login to ghcr.io registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -116,13 +115,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
       - name: Login to ghcr.io registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -164,13 +163,13 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Login to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           
       - name: Login to ghcr.io registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -216,19 +215,21 @@ jobs:
     steps:
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@v2
 
+      # Setting up Docker Buildx with docker-container driver is required
+      # at the moment to be able to use a subdirectory with Git context
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Login to ghcr.io registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -249,14 +250,17 @@ jobs:
             type=semver,pattern={{version}}
       
       - name: Docker Build and Push to GHCR and Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
+          context: .
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64,linux/arm/v7
+          secrets: |
+            GIT_AUTH_TOKEN=${{ secrets.SECRTET_GITHUB_TOKEN }}
 
       # If PR, put image tags in the PR comments
       # from https://github.com/marketplace/actions/create-or-update-comment
