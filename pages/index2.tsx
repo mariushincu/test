@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { getDataFromTree } from '@apollo/client/react/ssr';
 import withApollo from '../lib/withApollo';
 import {
-  LocationsQuery,
-  useLocationsQuery,
+  // LocationsQuery,
+  // useLocationsQuery,
   CharactersQuery,
   useCharactersQuery
 } from '../generated';
@@ -13,7 +13,7 @@ import {
   Button,
   Flex,
   Heading,
-  Text,
+  // Text,
   Box,
   Image,
   useColorMode,

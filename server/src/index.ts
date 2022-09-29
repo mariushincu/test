@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import 'reflect-metadata';
 import { createServer } from 'http';
 import { ApolloServer } from 'apollo-server-express';

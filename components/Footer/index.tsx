@@ -1,4 +1,4 @@
-import { Flex, Box, Text, Image, Icon, IconButton } from '@chakra-ui/react';
+import { Flex, Text, Image, Icon } from '@chakra-ui/react';
 import { HStack, VStack } from '@chakra-ui/layout';
 import { FaTwitter, FaLinkedin } from 'react-icons/fa';
 

@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {
   ApolloClient,
   ApolloProvider,
   HttpLink,
-  InMemoryCache,
-  createHttpLink
+  InMemoryCache
+  // createHttpLink
 } from '@apollo/client';
 // import { setContext } from '@apollo/client/link/context';
 import { NextPage } from 'next';
@@ -56,7 +57,7 @@ const withApollo = nextWithApollo(
       // Covert Page to NextPageWithLayout
       const PageWithLayout = Page as NextPageWithLayout;
 
-      const getLayout = PageWithLayout.getLayout ?? ((page: any) => page);
+      const getLayout = PageWithLayout.getLayout ?? ((page) => page);
 
       return getLayout(
         <ApolloProvider client={props.apollo}>

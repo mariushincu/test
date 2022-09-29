@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Flex, Image, Box, Text, Button } from '@chakra-ui/react';
 
 const Hero = () => {
