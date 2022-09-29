@@ -204,14 +204,13 @@ jobs:
       - name: Run Trivy for HIGH,CRITICAL CVEs and report (blocking)
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ghcr.io/mariushincu/test:$main
-          format: table
+          image-ref: ghcr.io/mariushincu/test:main
           exit-code: 1
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'HIGH,CRITICAL'
-          # format: 'sarif'
-          # output: 'trivy-results.sarif'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
       
       # - name: Upload Trivy scan results to GitHub Security tab
       #   uses: github/codeql-action/upload-sarif@v2
