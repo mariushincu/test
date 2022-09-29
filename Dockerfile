@@ -1,20 +1,17 @@
-# sample dockerfile for testing docker builds
-FROM nginx:1.20-alpine as base
+FROM node:16
+# Installing libvips-dev for sharp Compatability
+RUN apt-get update && apt-get install libvips-dev -y
 
-RUN apk add --no-cache curl
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+WORKDIR /opt/
+COPY ./package.json ./package-lock.json ./
 
-WORKDIR /test
+ENV PATH /opt/node_modules/.bin:$PATH
+RUN npm install
+WORKDIR /opt/app
+COPY ./ .
 
-COPY . .
-
-#########################
-FROM base as test
-
-#layer test tools and assets on top as optional test stage
-RUN apk add --no-cache apache2-utils
-
-
-#########################
-FROM base as final
-
-# this layer gets built by default unless you set target to test
+RUN npm run build
+EXPOSE 80
+CMD ["npm", "run", "develop"]
