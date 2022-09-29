@@ -50,7 +50,7 @@ jobs:
 
       - name: Build and Push to GHCR
         id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           push: ${{ endswith(github.ref, 'main') }} # Only push if we are on the master branch
           tags: ${{ steps.meta.outputs.tags }}
@@ -58,8 +58,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
-          secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }}
     
 # NEXT JOB #######################################################################   
   test-unit:
@@ -224,7 +222,7 @@ jobs:
 # # NEXT JOB #######################################################################   
   build-final-image:
     name: Build Final Image
-    needs: [test-unit, test-integration, test-k3d, scan-image]
+    needs: [test-unit] # [test-unit, test-integration, test-k3d, scan-image]
     runs-on: ubuntu-latest
 
     permissions:
@@ -250,7 +248,7 @@ jobs:
       - name: Login to ghcr.io registry
         uses: docker/login-action@v2
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -271,16 +269,13 @@ jobs:
       - name: Docker Build and Push to GHCR and Docker Hub
         uses: docker/build-push-action@v3
         with:
-          context: .
-          push: true
-          tags: ${{ steps.docker_meta.outputs.tags }}
-          labels: ${{ steps.docker_meta.outputs.labels }}
+          push: ${{ endswith(github.ref, 'main') }} # Only push if we are on the master branch
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64,linux/arm/v7
-          secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }}
-
+         
       # If PR, put image tags in the PR comments
       # from https://github.com/marketplace/actions/create-or-update-comment
         
