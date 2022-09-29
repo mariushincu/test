@@ -3,22 +3,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp
+  name: webapp
   labels:
-    app: myapp
+    app: webapp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: myapp
+      app: webapp
   template:
     metadata:
       labels:
-        app: myapp
+        app: webapp
+        version: IMAGE_LABEL
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: myapp
+        - name: webapp
           image: "${TESTING_IMAGE}"
           imagePullPolicy: IfNotPresent
