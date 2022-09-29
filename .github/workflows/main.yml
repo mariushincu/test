@@ -157,7 +157,7 @@ jobs:
             --docker-username=${{ github.actor }} \
             --docker-password=${{ secrets.GITHUB_TOKEN }}
           export TESTING_IMAGE=ghcr.io/mariushincu/test:main
-          kubectl apply -f k8s.yml
+          envsubst < k8s.yaml | kubectl apply -f -
           kubectl rollout status deployment webapp
           kubectl exec deploy/webapp -- curl --fail localhost
 
