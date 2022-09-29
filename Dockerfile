@@ -10,7 +10,7 @@ COPY ./package.json ./package-lock.json ./
 
 ENV PATH /opt/node_modules/.bin:$PATH
 RUN npm install
-WORKDIR /opt/app
+WORKDIR /opt/
 COPY ./ .
 
 RUN npm run build
