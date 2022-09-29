@@ -60,6 +60,8 @@ jobs:
           platforms: linux/amd64
           secrets: |
             GIT_AUTH_TOKEN=${{ secrets.GHCR_TOKEN }}
+
+      - run: docker push ghcr.io/instajobber/test:"$GITHUB_RUN_ID"
     
 # NEXT JOB #######################################################################   
   test-unit:
