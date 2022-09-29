@@ -197,7 +197,7 @@ jobs:
       - name: Run Trivy for all CVEs (non-blocking)
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ github.run_id }}
+          image-ref: ghcr.io/mariushincu/test:main
           format: table
           exit-code: 0
 
