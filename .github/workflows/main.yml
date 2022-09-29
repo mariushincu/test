@@ -174,6 +174,7 @@ jobs:
     permissions:
       contents: read # for actions/checkout to fetch code
       packages: read # needed to pull docker image to ghcr.io
+      actions: read
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
 
     steps:
