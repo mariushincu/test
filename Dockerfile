@@ -1,19 +1,12 @@
-FROM node:16
-# Installing libvips-dev for sharp Compatability
-RUN apt-get update && apt-get install libvips-dev -y
+FROM node:16-alpine
 
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
+RUN mkdir -p /usr/app/
+WORKDIR /usr/app/
 
-WORKDIR /opt/
-COPY ./package.json ./package-lock.json ./
+COPY ./ ./
 
-ENV PATH /opt/node_modules/.bin:$PATH
 RUN npm install
-WORKDIR /opt/
-COPY ./ .
-
 RUN npm run build
-EXPOSE 80
 
-CMD ["npm", "run", "develop"]
+EXPOSE 80
+CMD ["npm", "start"]
