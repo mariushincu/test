@@ -1,6 +1,6 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ObjectType } from 'type-graphql';
 
-@ObjectType({ description: "Actor Schema" })
+@ObjectType({ description: 'Actor Schema' })
 export class Actor {
   @Field({ nullable: false })
   id: number;

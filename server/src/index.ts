@@ -1,13 +1,13 @@
-import "reflect-metadata";
-import { createServer } from "http";
-import { ApolloServer } from "apollo-server-express";
-import express from "express";
-import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
-import { buildSchema } from "type-graphql";
-import { WebSocketServer } from "ws";
-import { useServer } from "graphql-ws/lib/use/ws";
-import { ActorResolver } from "./resolvers/Actor";
-import pubsub from "./lib/PubSub";
+import 'reflect-metadata';
+import { createServer } from 'http';
+import { ApolloServer } from 'apollo-server-express';
+import express from 'express';
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
+import { buildSchema } from 'type-graphql';
+import { WebSocketServer } from 'ws';
+import { useServer } from 'graphql-ws/lib/use/ws';
+import { ActorResolver } from './resolvers/Actor';
+import pubsub from './lib/PubSub';
 
 const PORT = process.env.PORT || 4000;
 
@@ -22,13 +22,13 @@ const main = async () => {
     // the WebSocket server.
     const schema = await buildSchema({
       resolvers: [ActorResolver],
-      pubSub: pubsub,
+      pubSub: pubsub
     });
 
     // Set up WebSocket server.
     const wsServer = new WebSocketServer({
       server: httpServer,
-      path: "/graphql",
+      path: '/graphql'
     });
     const serverCleanup = useServer({ schema }, wsServer);
 
@@ -45,11 +45,11 @@ const main = async () => {
             return {
               async drainServer() {
                 await serverCleanup.dispose();
-              },
+              }
             };
-          },
-        },
-      ],
+          }
+        }
+      ]
     });
     await server.start();
     server.applyMiddleware({ app });
