@@ -61,7 +61,7 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64
           secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.GHCR_TOKEN }}
+            GIT_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }}
     
 # NEXT JOB #######################################################################   
   test-unit:
@@ -79,7 +79,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Unit Testing in Docker
         run: docker run --rm ghcr.io/mariushincu/test:"$GITHUB_RUN_ID" echo "run test commands here"
