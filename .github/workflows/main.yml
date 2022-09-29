@@ -159,7 +159,6 @@ jobs:
           export TESTING_IMAGE=ghcr.io/mariushincu/test:main
           envsubst < k8s.yaml | kubectl apply -f -
           kubectl rollout status deployment webapp
-          kubectl exec deploy/webapp -- curl --fail localhost
 
 # NEXT JOB #######################################################################   
   # scan-image:
