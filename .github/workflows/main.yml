@@ -112,7 +112,7 @@ jobs:
         run: |
           export TESTING_IMAGE=ghcr.io/mariushincu/test:main
           echo Testing image: "$TESTING_IMAGE"
-        
+          docker compose -f docker-compose.test.yml up 
 
 # # NEXT JOB #######################################################################   
   test-k3d:
