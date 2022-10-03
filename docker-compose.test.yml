@@ -1,14 +1,12 @@
-version: "3"
+version: "3.9"
 
 services:
   webapp:
-    build: 
-      context: .
-      dockerfile: Dockerfile
+    build: .
     image: webapp
     container_name: webapp
     ports:
-      - "3000:3000"
+      - "3011:3000"
     volumes:
       - ./app:/urs/src/app
       - /usr/src/app/node_modules
