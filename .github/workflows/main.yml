@@ -81,38 +81,38 @@ jobs:
         run: docker run --rm ghcr.io/mariushincu/test:main echo "run test commands here"
 
 # NEXT JOB #######################################################################   
-  # test-integration:
-  #   name: Integration tests in Compose
-  #   needs: [build-test-image]
-  #   runs-on: ubuntu-latest
+  test-integration:
+    name: Integration tests in Compose
+    needs: [build-test-image]
+    runs-on: ubuntu-latest
 
-  #   permissions:
-  #     contents: read
-  #     packages: read
+    permissions:
+      contents: read
+      packages: read
 
-  #   steps:
+    steps:
 
-  #     - name: Checkout git repo
-  #       uses: actions/checkout@v3
+      - name: Checkout git repo
+        uses: actions/checkout@v3
 
-  #     - name: Login to Docker Hub
-  #       uses: docker/login-action@v2
-  #       with:
-  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
-  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       
-  #     - name: Login to ghcr.io registry
-  #       uses: docker/login-action@v2
-  #       with:
-  #         registry: ${{ env.REGISTRY }}
-  #         username: ${{ github.actor }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to ghcr.io registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Test healthcheck in Docker Compose
-  #       run: |
-  #         export TESTING_IMAGE=ghcr.io/mariushincu/test:main
-  #         echo Testing image: "$TESTING_IMAGE"
-  #         docker compose -f docker-compose.test.yml up --exit-code-from sut
+      - name: Test healthcheck in Docker Compose
+        run: |
+          export TESTING_IMAGE=ghcr.io/mariushincu/test:main
+          echo Testing image: "$TESTING_IMAGE"
+          docker compose -f docker-compose.test.yml up --exit-code-from sut
 
 # # NEXT JOB #######################################################################   
   test-k3d:
@@ -204,7 +204,7 @@ jobs:
       - name: Run Trivy for HIGH,CRITICAL CVEs and report (blocking)
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ghcr.io/mariushincu/test:$main
+          image-ref: ghcr.io/mariushincu/test:main
           exit-code: 1
           ignore-unfixed: true
           vuln-type: 'os,library'
@@ -221,7 +221,7 @@ jobs:
 # # NEXT JOB #######################################################################   
   build-final-image:
     name: Build Final Image
-    needs: [test-unit, test-k3d, scan-image] # [test-unit, test-integration, test-k3d, scan-image]
+    needs: [test-unit, test-integration, test-k3d, scan-image] # [test-unit, test-integration, test-k3d, scan-image]
     runs-on: ubuntu-latest
 
     permissions:
