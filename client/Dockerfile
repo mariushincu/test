@@ -6,7 +6,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Assumes you are building from a cloned repo with a lockfile
-COPY package.json package-lock.json ./
+# COPY package.json package-lock.json ./
 
 RUN yarn ci
 
