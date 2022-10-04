@@ -8,7 +8,7 @@ WORKDIR /app
 # Assumes you are building from a cloned repo with a lockfile
 # COPY package.json package-lock.json ./
 
-RUN yarn ci
+# RUN yarn ci
 
 
 FROM node:16-alpine
