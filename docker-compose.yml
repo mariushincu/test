@@ -1,37 +1,18 @@
-version: '3.4'
+version: '3'
 
 services:
-  backend:
-    image: backend-nextjs
-    build: 
-      context: ./backend
-    ports:
-      - "3001:3001"
-    networks:
-      - dev
-  
   client: 
-    image: client-nextjs
-    build: 
-      context: ./client
+    image: client-nextjs-prod
+    build: .
     volumes:
       - staticbuild:/app/out
-    networks:
-      - dev
-  
-  nginx:
-    image: server-nextjs
-    build:
-      context: ./nginx
-    volumes:
-      - staticbuild:/app/public
     ports: 
-      - "8080:80"
+      - "3500:3000"
     networks:
-      - dev
+      - prod
 
 networks:
-  dev:
+  prod:
     driver: bridge
 
 volumes:
