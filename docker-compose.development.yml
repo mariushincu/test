@@ -1,17 +1,18 @@
-version: '3.4'
+version: '3'
 
 services:
-  
   client: 
-    image: client-nextjs
+    image: client-nextjs-prod
     build: .
     volumes:
       - staticbuild:/app/out
+    ports: 
+      - "3500:3000"
     networks:
-      - dev
+      - prod
 
 networks:
-  dev:
+  prod:
     driver: bridge
 
 volumes:
