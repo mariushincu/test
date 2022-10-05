@@ -52,7 +52,6 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v3
         with:
-          file: ./client/Dockerfile
           push: ${{ endswith(github.ref, 'main') }} # Only push if we are on the main branch
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
