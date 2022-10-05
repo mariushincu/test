@@ -1,4 +1,3 @@
-node_modules
-README.md
-.git
+.git/
 .next
+node_modules
