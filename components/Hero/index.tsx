@@ -7,7 +7,7 @@ const Hero = () => {
       <Flex pl={150} pr={150} direction="column">
         <Text fontSize={40} fontWeight="bold" lineHeight={10}>
           Making curation easy and integrated for the world's leading
-          enterprises!
+          enterprises.
         </Text>
         <Box>
           <Button
