@@ -312,9 +312,6 @@ jobs:
       name: Deploy on GCP
       needs: [test-unit, test-k3d, scan-image]
       runs-on: ubuntu-latest
-      env:
-        IMAGE_NAME: test-app
-        PROJECT_ID: anderspink-app
       steps:
 
         - name: Checkout
@@ -341,17 +338,8 @@ jobs:
         
         - name: Deploy to GCloud
           run: |-
-            gcloud run deploy docker-next --image eu.gcr.io/${{ secrets.GCP_PROJECT_ID }}/docker-next:latest --region europe-west1
-
-        # - name: Deploy to Cloud Run
-        #   uses: google-github-actions/deploy-cloudrun@v0
-        #   with:
-        #     workload_identity_provider: XXX
-        #     service_account: XXX
-        # - name: Deploy to Cloud Run
-        #   uses: google-github-actions/deploy-cloudrun@v0
-        #   with:
-        #     service: ${{ env.SERVICE_NAME }}
-        #     source: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ env.PACKAGE_VERSION }} # equivalent to "gcloud builds submit ..."
-        #     region: ${{ env.RUN_REGION }}
-        #     tag: ${{ env.PACKAGE_VERSION }}
+            gcloud run deploy docker-next \
+            --image eu.gcr.io/${{ secrets.GCP_PROJECT_ID }}/docker-next:latest \
+            --region europe-west1 \
+            --platform managed \
+            --project ${{ secrets.GCP_PROJECT_ID }}
